@@ -30,6 +30,13 @@ const GithubProvider = ({ children }) => {
     );
     if (response) {
       setGithubUser(response.data);
+      const { login, followers_url } = response.data;
+      axios(`${rootUrl}/users/${login}/repos?per_page=100`).then((response) =>
+        setRepos(response.data)
+      );
+      axios(`${followers_url}?per_page=100`).then((response) =>
+        setFollowers(response.data)
+      );
     } else {
       toggleError(true, "there is no user with that username");
     }
@@ -49,7 +56,7 @@ const GithubProvider = ({ children }) => {
         checkRequests();
         setIsLoading(false);
       })
-      .catch((error) => console.log(err));
+      .catch((err) => console.log(err));
   };
 
   function toggleError(show = false, msg = "") {
