@@ -24,7 +24,7 @@ const GithubProvider = ({ children }) => {
 
   const searchGithubUser = async (user) => {
     toggleError();
-    // setIsLoading(true);
+    setIsLoading(true);
     const response = await axios(`${rootUrl}/users/${user}`).catch((err) =>
       console.log(err)
     );
@@ -46,6 +46,8 @@ const GithubProvider = ({ children }) => {
         if (remaining === 0) {
           toggleError(true, "sorry, you have exceeded your hourly rate limit!");
         }
+        checkRequests();
+        setIsLoading(false);
       })
       .catch((error) => console.log(err));
   };
@@ -66,6 +68,7 @@ const GithubProvider = ({ children }) => {
         requests,
         error,
         searchGithubUser,
+        isLoading,
       }}
     >
       {children}
